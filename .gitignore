@@ -6,11 +6,12 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data (important for you)
+# Large data / outputs
 data/raw_fastas/
 data/processed/
 results/
 
-# OS junk
-.DS_Store
+# VS Code / OS
+.vscode/
 Thumbs.db
+.DS_Store
