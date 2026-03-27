@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (important for you)
+data/raw_fastas/
+data/processed/
+results/
+
+# OS junk
+.DS_Store
+Thumbs.db
