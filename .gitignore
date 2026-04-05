@@ -11,11 +11,6 @@ notebooks/
 
 # Large data / outputs
 data/
-!data/
-data/*
-!data/references/
-data/references/*
-!data/references/terminal_windows.tsv
 data/raw_fastas/
 data/processed/
 results/
