@@ -1,0 +1,187 @@
+PROJECT SETUP & CONTEXT — GenomicGapID
+1) Project Overview
+
+This project focuses on:
+
+analyzing large bacterial genome FASTA files
+mapping sequences from terminal_windows.tsv to genomes
+identifying primer locations (forward + reverse)
+extracting amplicons
+building a discrimination-based scoring system for primer selection
+
+Key workflow principle:
+
+Structure and scoring logic come before full-scale data processing
+2) Core Biological Rules (CRITICAL)
+FASTA Files
+FASTA files contain forward strand only (5’ → 3’)
+All sequence comparisons must respect strand orientation
+Sequence Orientation
+
+Each sequence has an orientation:
+
+Positive (+)
+→ use sequence as-is
+Negative (-)
+→ must compute reverse complement before matching
+Reverse Primer Logic
+Reverse primer binds to forward strand
+Must use inverse complement before searching
+Sequence Types
+terminal_windows.tsv:
+contains genomic sequences (~400 bp)
+NOT actual primers
+Primers:
+~14–15 bp subsequences within those regions
+Amplicon Expectations
+Amplicon length should match:
+genome location
+values in gene_amplicon_summary
+3) Algorithm & Workflow Direction
+Priority Order
+Define scoring system
+Build data structures
+Extract biological data
+Run optimization
+Discrimination Scoring (Planned)
+Score per primer pair
+NOT across pairs in a set
+
+Steps:
+
+Generate genome profiles per primer pair
+Perform pairwise comparisons
+Assign score (0–2)
+Normalize (0–1)
+Average across genomes
+Important Constraint
+Same-length amplicons are indistinguishable
+
+Example:
+
+two genomes → both produce 200 bp
+result → single signal
+must penalize in scoring
+Goal
+Identify primer sets with:
+high discrimination
+clear score gap between best and second-best
+4) VS Code Project Structure
+GenomicGapID/
+├── data/
+│   ├── raw_fastas/        # large FASTA files (NOT tracked in Git)
+│   ├── references/        # metadata, TSV files
+│   └── processed/         # outputs (ignored)
+│
+├── scripts/               # main Python code
+│   ├── fasta_utils.py
+│   ├── primer_utils.py
+│   ├── scoring.py
+│   └── pipeline.py
+│
+├── notebooks/             # exploratory work
+│   └── original_notebook.ipynb
+│
+├── results/               # outputs (ignored)
+├── docs/                  # documentation
+│   └── project_setup_and_context.md
+│
+├── .gitignore
+├── README.md
+└── requirements.txt
+5) Environment Setup
+Python virtual environment: .venv
+Selected in VS Code (bottom-right)
+All packages installed inside .venv
+
+Key packages:
+
+biopython
+pandas
+jupyter
+6) Git & Data Rules
+Tracked in Git:
+scripts
+notebooks (lightweight)
+README
+documentation
+NOT tracked:
+data/raw_fastas/
+data/processed/
+large outputs
+
+Reason:
+
+FASTA files are large
+Git is not designed for large datasets
+7) Code Design Principles
+General
+modular code (no monolithic scripts)
+reusable functions
+clear separation of logic
+File Roles
+fasta_utils.py
+reading FASTA files
+sequence searching
+indexing
+primer_utils.py
+orientation handling
+reverse complement logic
+scoring.py
+discrimination scoring
+penalty handling
+pipeline.py
+orchestration of workflow
+8) Development Workflow
+Step-by-step
+Test logic on small FASTA files
+Validate correctness
+Scale to full datasets
+Optimize performance if needed
+Migration Strategy
+move code from notebook → scripts gradually
+test each component before continuing
+9) Codex Usage Guidelines
+
+Codex should be used for:
+
+writing functions
+debugging code
+structuring modules
+
+Codex should NOT be relied on for:
+
+biological correctness
+algorithm design decisions
+Prompting Strategy
+
+Always include:
+
+orientation rules
+FASTA assumptions
+sequence type (genomic vs primer)
+
+Example:
+
+FASTA is forward strand only. If sequence orientation is '-', reverse complement before searching.
+
+10) Immediate Next Steps
+Build FASTA search function:
+input: sequence + orientation
+output: start/end indices
+Validate on test FASTA
+Expand to:
+multiple genomes
+forward + reverse primer pairing
+Begin amplicon extraction
+11) Long-Term Goal
+
+Develop a pipeline that:
+
+maps primer pairs to genomes
+extracts amplicons
+evaluates discrimination ability
+selects optimal primer sets
+12) Key Principle
+
+Build structure first, then scale.
